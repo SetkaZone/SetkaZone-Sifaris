@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Xırdalan və Bakı üçün sürgülü setkaların hazırlanması və sifarişi. Keyfiyyətli və zəmanətli məhsullar – SetkaZone." />
+  <meta name="keywords" content="sürgülü setka, pəncərə setkası, qapı setkası, Xırdalan setka, Bakı setka, SetkaZone" />
+  <meta name="author" content="SetkaZone" />
+  <title>SetkaZone</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      margin: 0;
+      padding: 20px;
+      color: #0a3d62;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    header img {
+      width: 120px;
+      margin-bottom: 10px;
+    }
+    header h1 {
+      font-size: 2.5em;
+      margin: 0;
+      font-weight: bold;
+    }
+    .info-box {
+      background: #d1e7ff;
+      border-radius: 8px;
+      padding: 20px;
+      max-width: 700px;
+      margin: 0 auto 40px auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .info-box:hover {
+      transform: scale(1.03);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+    .info-box h2 {
+      margin-top: 0;
+      font-weight: 700;
+    }
+    .info-box p {
+      line-height: 1.6;
+    }
+    .image-gallery {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .image-gallery img {
+      width: 100%;
+      max-width: 300px;
+      height: auto;
+      border-radius: 10px;
+      transition: transform 0.4s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .image-gallery img:hover {
+      transform: scale(1.05);
+    }
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+    .social-icons a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #0a3d62;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 1.1em;
+    }
+    .social-icons img {
+      width: 28px;
+      height: 28px;
+    }
+    #orderButton {
+      display: block;
+      margin: 30px auto 50px auto;
+      background-color: #005baa;
+      color: white;
+      font-size: 1.5em;
+      padding: 15px 40px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    /* Kalkulyator dizayn */
+    #calculatorForm {
+      display: none;
+      max-width: 700px;
+      margin: 0 auto 40px auto;
+      background: white;
+      padding: 25px 40px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      
+      position: relative; /* bu mütləq olmalıdır */
+      z-index: 1000;       /* bu görünmə üstünlüyünü təmin edir */
+    }
+    #calculatorForm h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #005baa;
+    }
+    #calculatorForm label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+      color: #333;
+    }
+    #calculatorForm input[type="number"],
+    #calculatorForm input[type="text"],
+    #calculatorForm select {
+      width: 100%;
+      padding: 12px 15px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1.5px solid #ccc;
+      font-size: 1em;
+      transition: border-color 0.3s ease;
+    }
+    #calculatorForm input[type="number"]:focus,
+    #calculatorForm input[type="text"]:focus,
+    #calculatorForm select:focus {
+      border-color: #005baa;
+      outline: none;
+    }
+    .color-options {
+      display: flex;
+      gap: 18px;
+      margin-top: 10px;
+      justify-content: start;
+    }
+    .color-options label {
+      cursor: pointer;
+    }
+    .color-box {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      border: 2.5px solid transparent;
+      transition: border-color 0.3s ease;
+      display: inline-block;
+    }
+    .color-options input[type="radio"] {
+      display: none;
+    }
+    .color-options input[type="radio"]:checked + .color-box {
+      border-color: #005baa;
+      box-shadow: 0 0 8px rgba(0, 91, 170, 0.6);
+    }
+    #calculatorForm button {
+      margin-top: 30px;
+      width: 100%;
+      padding: 15px;
+      font-size: 1.3em;
+      font-weight: 700;
+      color: #fff;
+      background-color: #005baa;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    #calculatorForm button:hover {
+      background-color: #004080;
+    }
+    #errorMsg {
+      margin-top: 20px;
+      color: #d93025;
+      font-weight: 700;
+      text-align: center;
+      display: none;
+    }
+    #result {
+      margin-top: 25px;
+      text-align: center;
+      font-weight: 700;
+      color: #005baa;
+      font-size: 1.2em;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    #result.show {
+      opacity: 1;
+    }
+    .faq {
+      max-width: 700px;
+      margin: 0 auto 60px auto;
+    }
+    .faq h2 {
+      text-align: center;
+      font-size: 1.8em;
+      margin-bottom: 20px;
+    }
+    .faq-item {
+      margin-bottom: 15px;
+    }
+    .faq-item summary {
+      font-weight: bold;
+      cursor: pointer;
+    }
+    @media (max-width: 768px) {
+      .image-gallery {
+        flex-direction: column;
+        align-items: center;
+      }
+      .social-icons {
+        flex-direction: column;
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="images/logo.jpg" alt="SetkaZone Logo" />
+  <h1>SetkaZone</h1>
+</header>
+
+<div class="info-box">
+  <h2>Sürgülü Setkalar Haqqında</h2>
+  <p>Sürgülü setkalar digər setkalar kimi düşmə ehtimalı yoxdur, materialı adi setkadan çox daha qalın və keyfiyyətlidir. İstifadə olunan tül su keçirmir, lakin hava axını çox eladır. Həmçinin SetkaZone setkaları zəmanətlidir və bütün materialları Türkiyə istehsalıdır. Tülünün təmizlənməsi çox sadədir, nəm dəsmalla silmək kifayətdir.</p>
+</div>
+
+<div class="image-gallery">
+  <img src="images/setka1.jpg" alt="Setka 1">
+  <img src="images/setka2.jpg" alt="Setka 2">
+  <img src="images/setka3.jpg" alt="Setka 3">
+</div>
+
+<div class="info-box">
+  <h2>Niyə Bizi Seçməlisiniz?</h2>
+  <p>Keyfiyyətli materiallar, zəmanətli məhsullar və sürətli çatdırılma. Müştəri məmnuniyyəti bizim üçün ön plandadır. Hər zaman yenilikçi və estetik dizaynlar təqdim edirik.</p>
+</div>
+
+<div class="info-box">
+  <h2>Bizimlə Əlaqə</h2>
+  <p><strong>Telefon:</strong> <a href="tel:+994773652117">+994 77 365 21 17</a></p>
+  <p><strong>E-poçt:</strong> <a href="mailto:ebulfezceferov39@gmail.com">ebulfezceferov39@gmail.com</a></p>
+  <p><strong>Ünvan:</strong> <a href="https://maps.app.goo.gl/dPkAaggYVXgCTzAB9" target="_blank">Google Xəritədə bax</a></p>
+</div>
+
+<div class="social-icons">
+  <a href="https://www.tiktok.com/@setkazone3" target="_blank"><img src="images/tiktok_logo.png" alt="TikTok" />@setkazone3</a>
+  <a href="https://www.instagram.com/SetkaZone" target="_blank"><img src="images/instagram_icon.png" alt="Instagram" />@SetkaZone</a>
+</div>
+
+<button id="orderButton">Sifariş üçün klikləyin</button>
+
+
+
+<script>
+document.getElementById('orderButton').addEventListener('click', function() {
+    document.getElementById('calculatorForm').style.display = 'block';
+    window.scrollTo(0, 0);
+  });
+</script>
+
+
+<div id="calculatorForm" style="display:none;">
+  <p style="text-align:center; color:red; font-weight:bold; margin-top:20px;">📌 Qeyd: Çatdırılma və quraşdırılma qiymətə daxil deyil</p>
+
+  <h1>SetkaZone Sifariş Formu</h1>
+  <form id="orderForm" onsubmit="return True;">
+    <label>En (sm):</label>
+    <input type="number" id="width" required>
+
+    <label>Hündürlük (sm):</label>
+    <input type="number" id="height" required>
+
+    <label>Rəng seçimi:</label>
+    <div class="color-options">
+      <label>
+        <input type="radio" name="color" value="Ağ" checked />
+        <span class="color-box" style="background-color: white;" title="Ağ"></span>
+      </label>
+      <label>
+        <input type="radio" name="color" value="Qara" />
+        <span class="color-box" style="background-color: black;" title="Qara"></span>
+      </label>
+      <label>
+        <input type="radio" name="color" value="Qəhvəyi" />
+        <span class="color-box" style="background-color: #6e4b3a;" title="Qəhvəyi"></span>
+      </label>
+      <label>
+        <input type="radio" name="color" value="Boz" />
+        <span class="color-box" style="background-color: #a0a0a0;" title="Boz"></span>
+      </label>
+    </div>
+
+    <label>Material qalınlığı:</label>
+    <select id="material">
+      <option value="orta">Orta</option>
+      <option value="qalın">Qalın</option>
+    </select>
+
+    <label>İstifadə sahəsi:</label>
+    <select id="use">
+      <option value="pencere">Pəncərə</option>
+      <option value="qapi">Qapı</option>
+    </select>
+
+    <label>Açılma tipi:</label>
+    <select id="opening">
+      <option value="yandan">Yandan açılan</option>
+      <option value="ustden">Üstdən açılan</option>
+    </select>
+
+    <label>Ünvan:</label>
+    <input type="text" id="address" required>
+
+    <button type="button" onclick="calculatePrice()">Qiyməti Hesabla və WhatsApp-a keç</button>
+  </form>
+  <p id="result"></p>
+  <div id="errorMsg"></div>
+</div>
+
+<div class="info-box">
+  <h2>Haqqımızda</h2>
+  <p>SetkaZone olaraq Xırdalan və Bakı ətrafında keyfiyyətli və zəmanətli sürgülü setkalar hazırlayırıq. Məqsədimiz müştəriyə sərfəli qiymətə uzunömürlü və estetik məhsullar təqdim etməkdir.</p>
+</div>
+
+<div class="faq">
+  <h2>Tez-tez verilən suallar</h2>
+  <details class="faq-item">
+    <summary>Setkaların zəmanəti varmı?</summary>
+    <p>Bəli, bütün məhsullarımıza zəmanət veririk.</p>
+  </details>
+  <details class="faq-item">
+    <summary>Çatdırılma haralara mümkündür?</summary>
+    <p>Bakının bütün ərazilərinə və Xırdalana çatdırılma mümkündür.</p>
+  </details>
+  <details class="faq-item">
+    <summary>Setka necə təmizlənir?</summary>
+    <p>Sadəcə yaş dəsmalla silmək kifayətdir.</p>
+  </details>
+   <details class="faq-item">
+    <summary>Sizin setkalar başqa markaların setkalarından nə ilə fərqlənir?</summary>
+    <p>Bizim hazırladığımız setkalar defektli çıxarsa,pulsuz dəyişdirərik və ya yenidən düzəldərik.</p>
+  </details>
+</div>
+
+<script>
+function showCalculator() {
+  const form = document.getElementById("calculatorForm");
+  form.style.display = "block";
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+  function calculatePrice() {
+    const errorDiv = document.getElementById('errorMsg');
+    const resultDiv = document.getElementById('result');
+    errorDiv.style.display = 'none';
+    resultDiv.classList.remove('show');
+    resultDiv.innerHTML = '';
+
+    const widthRaw = document.getElementById('width').value.trim();
+    const heightRaw = document.getElementById('height').value.trim();
+    const width = Number(widthRaw);
+    const height = Number(heightRaw);
+    const color = document.querySelector('input[name="color"]:checked').value;
+    const material = document.getElementById('material').value;
+    const use = document.getElementById('use').value;
+    const opening = document.getElementById('opening').value;
+    const address = document.getElementById('address').value.trim();
+
+    if (!widthRaw || isNaN(width) || width < 40) {
+      showError('Zəhmət olmasa, en üçün 40 və daha böyük rəqəm daxil edin.');
+      return;
+    }
+    if (!heightRaw || isNaN(height) || height < 40) {
+      showError('Zəhmət olmasa, hündürlük üçün 40 və daha böyük rəqəm daxil edin.');
+      return;
+    }
+    if (!address) {
+      showError('Zəhmət olmasa, ünvanı daxil edin.');
+      return;
+    }
+
+    let basePrice = 0;
+    if (width >= 40 && width <= 70 && height <= 100) basePrice = 35
+    else if (width >= 40 && width <= 70 && height <= 120) basePrice = 40;
+    else if (width >= 40 && width <= 70 && height <= 140) basePrice = 45;
+    else if (width >= 40 && width <= 80 && height <= 150) basePrice = 50;
+    else if (width >= 40 && width <= 80 && height <= 170) basePrice = 55;
+    else if (width >= 50 && width <= 90 && height <= 200) basePrice = 90;
+    else if (width >= 50 && width <= 100 && height <= 220) basePrice = 95;
+    else if (width >= 50 && width <= 100 && height <= 240) basePrice = 105;
+    else if (width >= 50 && width <= 100 && height <= 300) basePrice = 120;
+    else {
+    showError('Daxil etdiyiniz ölçülər üçün qiymət mövcud deyil.');
+    return;
+    }
+if (use === 'qapi') basePrice += 10;
+if (material === 'qalın') basePrice += 10;
+if (!address.toLowerCase().includes('xirdalan')) basePrice += 10;
+
+let colorPrice = 0;
+if (color !== 'Ağ') {
+  if (use === 'pencere') colorPrice = 5;
+  else if (use === 'qapi') colorPrice = 10;
+}
+basePrice += colorPrice;
+
+const message = `Sifariş detalları:
+Ölçü: ${width}x${height} sm
+Rəng: ${color}
+Material: ${material}
+İstifadə: ${use}
+Açılma tipi: ${opening}
+Ünvan: ${address}
+Ümumi Qiymət: ${basePrice} AZN`;
+
+const encodedMessage = encodeURIComponent(message);
+
+resultDiv.innerHTML = `
+  Ümumi Qiymət: <strong>${basePrice} AZN</strong><br>
+  <a href="https://wa.me/994773652117?text=${encodedMessage}" target="_blank" style="color:#005baa; font-weight:700; text-decoration:underline;">WhatsApp ilə sifariş et</a>
+`;
+resultDiv.classList.add('show');
+}
+</script>
+
