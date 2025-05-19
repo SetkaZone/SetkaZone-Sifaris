@@ -16,8 +16,8 @@
 /*       background: #f8f9fa; */
       margin: 0;
       padding: 20px;
-      color: #0a3d62;
-      background: linear-gradient( to right,#33ffff,#0000ff);
+      color: #000305;
+      background: linear-gradient( to right,#33ffff,#3c3cfb);
     }
     header {
       text-align: center;
@@ -33,25 +33,40 @@
       font-weight: bold;
     }
     .info-box {
-      background: #d1e7ff;
-      border-radius: 8px;
-      padding: 20px;
-      max-width: 700px;
-      margin: 0 auto 40px auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .info-box:hover {
-      transform: scale(1.03);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    }
-    .info-box h2 {
-      margin-top: 0;
-      font-weight: 700;
-    }
-    .info-box p {
-      line-height: 1.6;
-    }
+  background: linear-gradient(to right, #e0f7fa, #d0ebff);
+  border: 2px solid #b0d4f1;
+  padding: 25px 30px;
+  border-radius: 15px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  color: #003865;
+  max-width: 700px;
+  margin: 0 auto 40px auto;
+  font-family: 'Segoe UI', sans-serif;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.info-box:hover {
+  transform: scale(1.02);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+}
+
+.info-box a {
+  color: #005baa;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.info-box a:hover {
+  color: #002b5b;
+  text-decoration: underline;
+}
+
+.info-box p {
+  margin: 12px 0;
+  font-size: 1.1em;
+  line-height: 1.6;
+}
     .image-gallery {
       display: flex;
       justify-content: center;
@@ -81,7 +96,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      color: #0a3d62;
+      color: #000006;
       font-weight: 600;
       text-decoration: none;
       font-size: 1.1em;
@@ -101,7 +116,6 @@
       border-radius: 10px;
       cursor: pointer;
     }
-    /* Kalkulyator dizayn */
     #calculatorForm {
       display: none;
       max-width: 700px;
@@ -112,8 +126,8 @@
       box-shadow: 0 0 15px rgba(0,0,0,0.1);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       
-      position: relative; /* bu mütləq olmalıdır */
-      z-index: 1000;       /* bu görünmə üstünlüyünü təmin edir */
+      position: relative; 
+      z-index: 1000;       
     }
     #calculatorForm h1 {
       text-align: center;
@@ -228,6 +242,20 @@
         gap: 20px;
       }
     }
+    #errorMsg {
+  margin-top: 20px;
+  color: #d93025;
+  font-weight: 700;
+  text-align: center;
+  display: none;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
   </style>
 </head>
 <body>
@@ -256,8 +284,8 @@
 <div class="info-box">
   <h2>Bizimlə Əlaqə</h2>
   <p><strong>Telefon:</strong> <a href="tel:+994773652117">+994 77 365 21 17</a></p>
-  <p><strong>E-poçt:</strong> <a href="mailto:ebulfezceferov39@gmail.com">ebulfezceferov39@gmail.com</a></p>
-  <p><strong>Ünvan:</strong> <a href="https://maps.app.goo.gl/dPkAaggYVXgCTzAB9" target="_blank">Google Xəritədə bax</a></p>
+<p><strong>E-poçt:</strong> <a href="mailto:ebulfezceferov39@gmail.com">ebulfezceferov39@gmail.com</a></p>
+<p><strong> Ünvan:</strong> <a href="https://maps.app.goo.gl/dPkAaggYVXgCTzAB9" target="_blank">Google Xəritədə bax</a></p>
 </div>
 
 <div class="social-icons">
@@ -292,19 +320,19 @@ document.getElementById('orderButton').addEventListener('click', function() {
     <div class="color-options">
       <label>
         <input type="radio" name="color" value="Ağ" checked />
-        <span class="color-box" style="background-color: white;" title="Ağ"></span>
+        <span class="color-box" style="background-color: white; border: 2px solid black;" title="Ağ"></span>
       </label>
       <label>
         <input type="radio" name="color" value="Qara" />
-        <span class="color-box" style="background-color: black;" title="Qara"></span>
+        <span class="color-box" style="background-color: black;border: 2px solid black;" title="Qara"></span>
       </label>
       <label>
         <input type="radio" name="color" value="Qəhvəyi" />
-        <span class="color-box" style="background-color: #6e4b3a;" title="Qəhvəyi"></span>
+        <span class="color-box" style="background-color: #6e4b3a;border: 2px solid black;" title="Qəhvəyi"></span>
       </label>
       <label>
         <input type="radio" name="color" value="Boz" />
-        <span class="color-box" style="background-color: #a0a0a0;" title="Boz"></span>
+        <span class="color-box" style="background-color: #a0a0a0;border: 2px solid black;" title="Boz"></span>
       </label>
     </div>
 
@@ -365,6 +393,23 @@ function showCalculator() {
   const form = document.getElementById("calculatorForm");
   form.style.display = "block";
   window.scrollTo({top: 0, behavior: 'smooth'});
+}
+function showError(message) {
+  const errorDiv  = document.getElementById('errorMsg');
+  const resultDiv = document.getElementById('result');
+  errorDiv.innerText = message;
+  errorDiv.style.display = 'block';
+  resultDiv.classList.remove('show');
+  resultDiv.innerHTML = `
+  Ümumi Qiymət: <strong>${basePrice} AZN</strong><br>
+  <a href="https://wa.me/994773652117?text=${encodedMessage}" target="_blank"
+     style="color:#005baa; font-weight:700; text-decoration:underline;">
+     WhatsApp ilə sifariş et
+  </a>
+`;
+resultDiv.style.display = 'block';   // <‑‑ Göstər
+resultDiv.classList.add('show');
+  resultDiv.style.display = 'none';
 }
 
   function calculatePrice() {
@@ -434,10 +479,19 @@ Açılma tipi: ${opening}
 const encodedMessage = encodeURIComponent(message);
 
 resultDiv.innerHTML = `
-  Ümumi Qiymət: <strong>${basePrice} AZN</strong><br>
-  <a href="https://wa.me/994773652117?text=${encodedMessage}" target="_blank" style="color:#005baa; font-weight:700; text-decoration:underline;">WhatsApp ilə sifariş et</a>
-`;
+  Ümumi&nbsp;Qiymət: <strong>${basePrice}&nbsp;AZN</strong><br><br>
+  <a href="https://wa.me/994773652117?text=${encodedMessage}" target="_blank"
+     style="
+       display:inline-flex; align-items:center; gap:8px;
+       background:#25D366; padding:12px 24px; border-radius:8px;
+       color:#fff; font-weight:600; text-decoration:none;
+       box-shadow:0 3px 8px rgba(0,0,0,0.15);
+     ">
+     <img src="images/whatsapp_web.png" alt="WhatsApp" style="width:20px;height:20px;">
+     WhatsApp‑la sifariş et
+  </a>
+`
+
 resultDiv.classList.add('show');
 }
 </script>
-
