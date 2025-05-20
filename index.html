@@ -130,6 +130,25 @@
   50% { box-shadow: 0 0 20px rgba(0,255,100,0.9); }
   100% { box-shadow: 0 0 10px rgba(0,255,100,0.4); }
 }
+.fancy-button {
+  display: inline-block;
+  background-color: #66e56f;
+  color: white;
+  font-size: 1.1em;
+  padding: 12px 26px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 0 12px rgba(0, 255, 100, 0.5);
+  animation: pulse 2s infinite;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.fancy-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(0, 255, 100, 0.8);
+}
+
 
     #calculatorForm {
       display: none;
@@ -203,7 +222,7 @@
       font-size: 1.3em;
       font-weight: 700;
       color: #fff;
-      background-color: #005baa;
+      background-color: #66e56f;;
       border: none;
       border-radius: 12px;
       cursor: pointer;
@@ -481,8 +500,11 @@ document.getElementById('orderButton').addEventListener('click', function() {
 
 <label>Əlaqə nömrəsi:</label>
 <input type="tel" id="phone"
-       pattern="\+?\d{9,15}"
-       placeholder="+994*********" required>
+       pattern="^\+994\d{9}$"
+       maxlength="13"
+       inputmode="numeric"
+       placeholder="+994XXXXXXXXX"
+       required>
 <label for="promoCode">Endirim kodu:</label>
 <input
   type="text"
@@ -508,14 +530,16 @@ document.getElementById('orderButton').addEventListener('click', function() {
       placeholder="Ünvan avtomatik doldurulacaq"
     >
     <button
-      type="button"
-      class="location-button"
-      title="Avtomatik lokasiya üçün klikləyin"
-      aria-label="Avtomatik lokasiya üçün klikləyin"
-      id="geoBtn"
-    >📍</button>
+  type="button"
+  id="geoBtn"
+  class="fancy-button"
+  title="Avtomatik lokasiya üçün klikləyin"
+  aria-label="Avtomatik lokasiya üçün klikləyin"
+> 📍 Avtomatik ünvan</button>
   </div>
-  <small class="address-hint">Avtomatik ünvan üçün 📍 düyməsinə klikləyin</small>
+<small class="address-hint" style="display:block; text-align:center; margin-top:10px;">
+  📌 Avtomatik ünvan üçün yuxarıdakı düyməyə klikləyin
+</small>
 </div>
 <div id="toast" style="
   display:none;
@@ -531,7 +555,7 @@ document.getElementById('orderButton').addEventListener('click', function() {
   z-index:9999;
   transition: opacity 0.4s ease;">
 </div>
-    <button type="button" onclick="calculatePrice()">Qiyməti Hesabla və WhatsApp-a keç</button>
+    <button type="button" onclick="calculatePrice()" class="fancy-button">Qiyməti Hesabla və WhatsApp-a keç</button>
   </form>
 <div id="priceBox" style="display: none; text-align:center; margin-top:20px;">
   <div id="originalPriceBox" style="color: gray; font-size: 1.1em;">
@@ -602,17 +626,19 @@ function calculatePrice() {
   const address = document.getElementById('address').value.trim();
   const fullName = document.getElementById('fullName').value.trim();
   const phone = document.getElementById('phone').value.trim();
-  const promo = (document.getElementById('promoCode').value || "").trim().toLowerCase();
+
+
 
   if (!fullName) {
     showError('Zəhmət olmasa, ad və soyad daxil edin.');
     return;
   }
 
-  if (!phone || !/^\+?\d{9,15}$/.test(phone)) {
-    showError('Zəhmət olmasa, düzgün formatda əlaqə nömrəsi daxil edin. Məsələn: +994*********');
-    return;
-  }
+if (!phone || !/^\+994\d{9}$/.test(phone)) {
+  showError('Zəhmət olmasa, +994 ilə başlayan 9 rəqəmli nömrə daxil edin. Məsələn: +994501234567');
+  return;
+}
+
 
   if (!widthRaw || isNaN(width) || width < 40) {
     showError('Zəhmət olmasa, en üçün 40 və daha böyük rəqəm daxil edin.');
@@ -643,7 +669,7 @@ else if (width >= 50 && width <= 150 && height <= 220) basePrice = 105;
 else if (width >= 50 && width <= 150 && height <= 240) basePrice = 115;
 else if (width >= 50 && width <= 150 && height <= 300) basePrice = 130;
   else {
-    showError('Daxil etdiyiniz ölçülər üçün qiymət mövcud deyil.');
+    showError('Daxil etdiyiniz ölçülər üçün qiymət mövcud deyil,xahiş olunur bizlə əlaqə saxlayın.');
     return;
   }
 
@@ -658,11 +684,19 @@ if (color !== 'Ağ') {
   basePrice += colorPrice;
 
  let finalPrice = basePrice;
+let promoRaw = document.getElementById('promoCode').value || "";
 
-const promoInput = promo.trim().toLowerCase();
-if (promoInput === "ilk10" || promoInput === "ılk10") {
-  finalPrice =  Math.round((basePrice * 0.9).toFixed(0)); // 10% endirim
+let promoInput = promoRaw.trim()
+  .replace(/İ/g, 'i')    // Böyük İ → i
+  .replace(/ı/g, 'i')    // Nöqtəsiz i → i
+  .toLowerCase()
+  .normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Diakritikləri təmizlə
+  let isDiscount = promoInput === "ilk10";
+
+if (isDiscount) {
+  finalPrice = Math.round((basePrice * 0.9).toFixed(0));
 }
+
 
 const priceBox = document.getElementById('priceBox');
 const originalPriceBox = document.getElementById('originalPriceBox');
@@ -670,7 +704,7 @@ const discountPriceBox = document.getElementById('discountPriceBox');
 
 priceBox.style.display = 'block';
 
-if (promoInput === "ilk10") {
+if (isDiscount) {
   originalPriceBox.innerHTML = `Endirimsiz Qiymət: <span>${basePrice.toFixed(0)}</span> AZN`;
   originalPriceBox.style.textDecoration = 'line-through';
   originalPriceBox.style.color = 'gray';
@@ -686,6 +720,7 @@ if (promoInput === "ilk10") {
   discountPriceBox.innerHTML = `Qiymət: <span>${finalPrice.toFixed(0)}</span> AZN`;
   discountPriceBox.style.display = 'block';
 }
+
 
   const maps = document.getElementById('mapsLink').value;
   const mapsLink = lat && lon ? `\nXəritə: https://maps.google.com/?q=${lat},${lon}` : "";
