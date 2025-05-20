@@ -7,13 +7,13 @@
   <meta name="keywords" content="sürgülü setka, pəncərə setkası, qapı setkası, Xırdalan setka, Bakı setka, SetkaZone" />
   <meta name="author" content="SetkaZone" />
   <title>SetkaZone</title>
+
   <style>
-    * {
+ * {
       box-sizing: border-box;
     }
     body {
       font-family: Arial, sans-serif;
-/*       background: #f8f9fa; */
       margin: 0;
       padding: 20px;
       color: #000305;
@@ -255,7 +255,114 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
+.whatsapp-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #25D366;
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 12px 22px;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+  font-size: 1.1em;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
 
+.whatsapp-button:hover {
+  background-color: #1ebe5b;
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.whatsapp-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.video-link {
+  display: inline-block;
+  background: linear-gradient(to right, #00c6ff, #0072ff);
+  padding: 12px 18px;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  font-size: 1.1em;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.video-link:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+  background: linear-gradient(to right, #0072ff, #00c6ff);
+}
+
+.video-modal {
+  display: none;
+  position: fixed;
+  z-index: 10000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.5s forwards;
+}
+
+.video-modal.show {
+  display: flex;
+}
+
+.video-content {
+  position: relative;
+  background: #000;
+  border-radius: 12px;
+  padding: 10px;
+  animation: scaleIn 0.4s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  max-width: 90%;
+  width: 600px;
+}
+
+.video-content video {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.close-btn {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #ff004c;
+  color: white;
+  font-size: 24px;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.2s;
+}
+.close-btn:hover {
+  transform: rotate(90deg);
+  background: #e60044;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
   </style>
 </head>
 <body>
@@ -296,7 +403,6 @@
 <button id="orderButton">Sifariş üçün klikləyin</button>
 
 
-
 <script>
 document.getElementById('orderButton').addEventListener('click', function() {
     document.getElementById('calculatorForm').style.display = 'block';
@@ -304,18 +410,23 @@ document.getElementById('orderButton').addEventListener('click', function() {
   });
 </script>
 
-
 <div id="calculatorForm" style="display:none;">
-  <p style="text-align:center; color:red; font-weight:bold; margin-top:20px;">📌 Qeyd: Çatdırılma və quraşdırılma qiymətə daxil deyil</p>
+  <p style="text-align:center; color:red; font-weight:bold; margin-top:20px;">📌 Qeyd: Çatdırılma və quraşdırılma qiymətə daxil deyil!</p>
+  <p style="text-align:center; color:red; font-weight:bold; margin-top:20px;">📌 Qeyd: 1-dən çox sifariş üçün formdan bir neçə dəfə istifadə edin və ya bizlə əlaqə saxlayın!</p>
+
 
   <h1>SetkaZone Sifariş Formu</h1>
-  <form id="orderForm" onsubmit="return True;">
+  <form id="orderForm">
     <label>En (sm):</label>
     <input type="number" id="width" required>
 
     <label>Hündürlük (sm):</label>
     <input type="number" id="height" required>
-
+    <div style="margin: 10px 0; text-align:center;">
+  <a href="#" onclick="openVideoModal()" class="video-link">
+    📏 <strong>Düzgün ölçü alma videosu</strong>
+  </a>
+</div>
     <label>Rəng seçimi:</label>
     <div class="color-options">
       <label>
@@ -354,15 +465,74 @@ document.getElementById('orderButton').addEventListener('click', function() {
       <option value="ustden">Üstdən açılan</option>
     </select>
 
-    <label>Ünvan:</label>
-    <input type="text" id="address" required>
+   <label>Ad, Soyad:</label>
+<input type="text" id="fullName" required>
 
+<label>Əlaqə nömrəsi:</label>
+<input type="tel" id="phone"
+       pattern="\+?\d{9,15}"
+       placeholder="+994*********" required>
+<label for="promoCode">Endirim kodu:</label>
+<input
+  type="text"
+  id="promoCode"
+  name="promoCode"
+  placeholder="Məs: ILK10"
+/>
+<small>“ILK10” kodunu daxil edin – 10% endirim tətbiq olunacaq</small>
+
+
+
+<div class="address-group">
+  <label for="address" class="address-label">Ünvan</label>
+  <div class="address-input-wrapper">
+    <input type="hidden" id="lat">
+<input type="hidden" id="lon">
+<input type="hidden" id="mapsLink">
+    <input
+      type="text"
+      id="address"
+      name="address"
+      required
+      placeholder="Ünvan avtomatik doldurulacaq"
+    >
+    <button
+      type="button"
+      class="location-button"
+      title="Avtomatik lokasiya üçün klikləyin"
+      aria-label="Avtomatik lokasiya üçün klikləyin"
+      id="geoBtn"
+    >📍</button>
+  </div>
+  <small class="address-hint">Avtomatik ünvan üçün 📍 düyməsinə klikləyin</small>
+</div>
+<div id="toast" style="
+  display:none;
+  position:fixed;
+  top:20px;
+  right:20px;
+  background:#28a745;
+  color:white;
+  padding:12px 18px;
+  border-radius:8px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.15);
+  font-weight:600;
+  z-index:9999;
+  transition: opacity 0.4s ease;">
+</div>
     <button type="button" onclick="calculatePrice()">Qiyməti Hesabla və WhatsApp-a keç</button>
   </form>
-  <p id="result"></p>
+<div id="priceBox" style="display: none; text-align:center; margin-top:20px;">
+  <div id="originalPriceBox" style="color: gray; font-size: 1.1em;">
+    Endirimsiz Qiymət: <span id="originalPrice">0</span> AZN
+  </div>
+  <div id="discountPriceBox" style="color: #005baa; font-size: 1.4em; font-weight: bold;">
+    Endirimli Qiymət: <span id="discountPrice">0</span> AZN
+  </div>
+</div>
+<div id="whatsappLinkBox" style="margin-top: 20px; text-align:center;"></div>
   <div id="errorMsg"></div>
 </div>
-
 <div class="info-box">
   <h2>Haqqımızda</h2>
   <p>SetkaZone olaraq Xırdalan və Bakı ətrafında keyfiyyətli və zəmanətli sürgülü setkalar hazırlayırıq. Məqsədimiz müştəriyə sərfəli qiymətə uzunömürlü və estetik məhsullar təqdim etməkdir.</p>
@@ -389,109 +559,242 @@ document.getElementById('orderButton').addEventListener('click', function() {
 </div>
 
 <script>
-function showCalculator() {
+  function showCalculator() {
   const form = document.getElementById("calculatorForm");
   form.style.display = "block";
   window.scrollTo({top: 0, behavior: 'smooth'});
 }
-function showError(message) {
-  const errorDiv  = document.getElementById('errorMsg');
-  const resultDiv = document.getElementById('result');
-  errorDiv.innerText = message;
-  errorDiv.style.display = 'block';
-  resultDiv.classList.remove('show');
-  resultDiv.innerHTML = `
-  Ümumi Qiymət: <strong>${basePrice} AZN</strong><br>
-  <a href="https://wa.me/994773652117?text=${encodedMessage}" target="_blank"
-     style="color:#005baa; font-weight:700; text-decoration:underline;">
-     WhatsApp ilə sifariş et
-  </a>
-`;
-resultDiv.style.display = 'block';   // <‑‑ Göstər
-resultDiv.classList.add('show');
-  resultDiv.style.display = 'none';
-}
-
-  function calculatePrice() {
+  function showError(message) {
     const errorDiv = document.getElementById('errorMsg');
     const resultDiv = document.getElementById('result');
-    errorDiv.style.display = 'none';
+    errorDiv.innerText = message;
+    errorDiv.style.display = 'block';
     resultDiv.classList.remove('show');
     resultDiv.innerHTML = '';
+    document.getElementById('priceBox').style.display = 'none';
+    document.getElementById('whatsappLinkBox').innerHTML = '';
 
-    const widthRaw = document.getElementById('width').value.trim();
-    const heightRaw = document.getElementById('height').value.trim();
-    const width = Number(widthRaw);
-    const height = Number(heightRaw);
-    const color = document.querySelector('input[name="color"]:checked').value;
-    const material = document.getElementById('material').value;
-    const use = document.getElementById('use').value;
-    const opening = document.getElementById('opening').value;
-    const address = document.getElementById('address').value.trim();
+  }
+function calculatePrice() {
+  const lat = document.getElementById('lat').value;
+  const lon = document.getElementById('lon').value;
+  const errorDiv = document.getElementById('errorMsg');
+  errorDiv.style.display = 'none';
 
-    if (!widthRaw || isNaN(width) || width < 40) {
-      showError('Zəhmət olmasa, en üçün 40 və daha böyük rəqəm daxil edin.');
-      return;
-    }
-    if (!heightRaw || isNaN(height) || height < 40) {
-      showError('Zəhmət olmasa, hündürlük üçün 40 və daha böyük rəqəm daxil edin.');
-      return;
-    }
-    if (!address) {
-      showError('Zəhmət olmasa, ünvanı daxil edin.');
-      return;
-    }
+  const widthRaw = document.getElementById('width').value.trim();   // məsələn: "94.2"
+  const heightRaw = document.getElementById('height').value.trim(); // məsələn: "101.5"
+  const width = Math.ceil(Number(widthRaw));  // qiymət üçün 95
+  const height = Math.ceil(Number(heightRaw)); // qiymət üçün 102
+  const color = document.querySelector('input[name="color"]:checked')?.value || "Ağ";
+  const material = document.getElementById('material').value;
+  const use = document.getElementById('use').value;
+  const opening = document.getElementById('opening').value;
+  const address = document.getElementById('address').value.trim();
+  const fullName = document.getElementById('fullName').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const promo = (document.getElementById('promoCode').value || "").trim().toLowerCase();
 
-    let basePrice = 0;
-    if (width >= 40 && width <= 70 && height <= 100) basePrice = 35
-    else if (width >= 40 && width <= 70 && height <= 120) basePrice = 40;
-    else if (width >= 40 && width <= 70 && height <= 140) basePrice = 45;
-    else if (width >= 40 && width <= 80 && height <= 150) basePrice = 50;
-    else if (width >= 40 && width <= 80 && height <= 170) basePrice = 55;
-    else if (width >= 50 && width <= 90 && height <= 200) basePrice = 90;
-    else if (width >= 50 && width <= 150 && height <= 220) basePrice = 95;
-    else if (width >= 50 && width <= 150 && height <= 240) basePrice = 105;
-    else if (width >= 50 && width <= 150 && height <= 300) basePrice = 120;
-    else {
+  if (!fullName) {
+    showError('Zəhmət olmasa, ad və soyad daxil edin.');
+    return;
+  }
+
+  if (!phone || !/^\+?\d{9,15}$/.test(phone)) {
+    showError('Zəhmət olmasa, düzgün formatda əlaqə nömrəsi daxil edin. Məsələn: +994*********');
+    return;
+  }
+
+  if (!widthRaw || isNaN(width) || width < 40) {
+    showError('Zəhmət olmasa, en üçün 40 və daha böyük rəqəm daxil edin.');
+    return;
+  }
+
+  if (!heightRaw || isNaN(height) || height < 40) {
+    showError('Zəhmət olmasa, hündürlük üçün 40 və daha böyük rəqəm daxil edin.');
+    return;
+  }
+
+  if (!address) {
+    showError('Zəhmət olmasa, ünvanı daxil edin.');
+    return;
+  }
+
+  let basePrice = 0;
+
+  if (width >= 40 && width <= 70 && height <= 100) basePrice = 45;
+  else if (width >= 40 && width <= 70 && height <= 120) basePrice = 50;
+  else if (width >= 40 && width <= 70 && height <= 140) basePrice = 55;
+  else if (width >= 40 && width <= 80 && height <= 150) basePrice = 60;
+  else if (width >= 40 && width <= 80 && height <= 170) basePrice = 65;
+  else if (width >= 50 && width <= 90 && height <= 200) basePrice = 100;
+  else if (width >= 50 && width <= 150 && height <= 220) basePrice = 105;
+  else if (width >= 50 && width <= 150 && height <= 240) basePrice = 115;
+  else if (width >= 50 && width <= 150 && height <= 300) basePrice = 130;
+  else {
     showError('Daxil etdiyiniz ölçülər üçün qiymət mövcud deyil.');
     return;
-    }
-if (use === 'qapi') basePrice += 10;
-if (material === 'qalın') basePrice += 10;
-if (!address.toLowerCase().includes('xirdalan')) basePrice += 10;
+  }
 
-let colorPrice = 0;
-if (color !== 'Ağ') {
-  if (use === 'pencere') colorPrice = 5;
-  else if (use === 'qapi') colorPrice = 10;
+  if (material === 'qalın') basePrice += 10;
+
+  let colorPrice = 0;
+  if (color !== 'Ağ') {
+    if (use === 'qapi') colorPrice = 10;
+    else if (use === 'pencere') colorPrice = 5;
+  }
+
+  basePrice += colorPrice;
+
+ let finalPrice = basePrice;
+
+const promoInput = promo.trim().toLowerCase();
+if (promoInput === "ilk10") {
+  finalPrice =  Math.round((basePrice * 0.9).toFixed(0)); // 10% endirim
 }
-basePrice += colorPrice;
 
-const message = `Sifariş detalları:
-Ölçü: ${width}x${height} sm
+const priceBox = document.getElementById('priceBox');
+const originalPriceBox = document.getElementById('originalPriceBox');
+const discountPriceBox = document.getElementById('discountPriceBox');
+
+priceBox.style.display = 'block';
+
+if (promoInput === "ilk10") {
+  originalPriceBox.innerHTML = `Endirimsiz Qiymət: <span>${basePrice.toFixed(0)}</span> AZN`;
+  originalPriceBox.style.textDecoration = 'line-through';
+  originalPriceBox.style.color = 'gray';
+  originalPriceBox.style.display = 'block';
+
+  discountPriceBox.innerHTML = `Endirimli Qiymət: <span>${finalPrice.toFixed(0)}</span> AZN`;
+  discountPriceBox.style.display = 'block';
+} else {
+  originalPriceBox.innerHTML = `<span style="font-style:italic; color:#666;">Endirim tətbiq olunmadı</span>`;
+  originalPriceBox.style.textDecoration = 'none';
+  originalPriceBox.style.display = 'block';
+
+  discountPriceBox.innerHTML = `Qiymət: <span>${finalPrice.toFixed(0)}</span> AZN`;
+  discountPriceBox.style.display = 'block';
+}
+
+  const maps = document.getElementById('mapsLink').value;
+  const mapsLink = lat && lon ? `\nXəritə: https://maps.google.com/?q=${lat},${lon}` : "";
+
+  const message = `Sifariş detalları:
+Ölçü:  ${widthRaw}x${heightRaw} sm
 Rəng: ${color}
 Material: ${material}
 İstifadə: ${use}
 Açılma tipi: ${opening}
+Ad Soyad: ${fullName}
+Əlaqə: ${phone}
 Ünvan: ${address}
-Ümumi Qiymət: ${basePrice} AZN`;
+Xəritədə aç: ${maps}
+Endirimli Qiymət: ${finalPrice.toFixed(0)} AZN`;
 
-const encodedMessage = encodeURIComponent(message);
+  const encodedMessage = encodeURIComponent(message);
+  document.getElementById('whatsappLinkBox').innerHTML = `
+    <a href="https://wa.me/994773652117?text=${encodedMessage}" class="whatsapp-button" target="_blank">
+      <img src="images/whatsapp-web.png" alt="WhatsApp" class="whatsapp-icon">
+      <span>WhatsApp ilə sifariş et</span>
+    </a>
+  `;
+}
+function showToast(msg) {
+  const toast = document.getElementById("toast");
+  toast.innerText = msg;
+  toast.style.display = "block";
+  toast.style.opacity = 1;
 
-resultDiv.innerHTML = `
-  Ümumi&nbsp;Qiymət: <strong>${basePrice}&nbsp;AZN</strong><br><br>
-  <a href="https://wa.me/994773652117?text=${encodedMessage}" target="_blank"
-     style="
-       display:inline-flex; align-items:center; gap:8px;
-       background:#25D366; padding:12px 24px; border-radius:8px;
-       color:#fff; font-weight:600; text-decoration:none;
-       box-shadow:0 3px 8px rgba(0,0,0,0.15);
-     ">
-     <img src="images/whatsapp-web.png" alt="WhatsApp" style="width:20px;height:20px;">
-     WhatsApp‑la sifariş et
-  </a>
-`
+  setTimeout(() => {
+    toast.style.opacity = 0;
+    setTimeout(() => {
+      toast.style.display = "none";
+    }, 400);
+  }, 3500);
+}
 
-resultDiv.classList.add('show');
+async function fillAddressFromLocation() {
+  const addressInput = document.getElementById('address');
+  const latInp = document.getElementById('lat');
+  const lonInp = document.getElementById('lon');
+  const mapsInp = document.getElementById('mapsLink');
+
+  if (!navigator.geolocation) {
+    showError('Brauzeriniz lokasiya funksiyasını dəstəkləmir, xahiş olunur ünvanı manuel daxil edin.');
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      const lat = position.coords.latitude.toFixed(6);
+      const lon = position.coords.longitude.toFixed(6);
+
+      latInp.value = lat;
+      lonInp.value = lon;
+      mapsInp.value = `https://maps.google.com/?q=${lat},${lon}`;
+
+      try {
+        const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
+        const resp = await fetch(url, {
+          headers: { 'Accept-Language': 'az' }
+        });
+        if (!resp.ok) throw new Error();
+
+        const data = await resp.json();
+        const address = data?.display_name || `${lat}, ${lon}`;
+        addressInput.value = address;
+
+        showToast("✅ Ünvan avtomatik dolduruldu");
+      } catch {
+        addressInput.value = `${lat}, ${lon}`;
+        showToast("⚠️ Koordinatlar alındı, lakin ünvan tapılmadı");
+      }
+    },
+    () => {
+      showError('📍 Lokasiya əldə olunmadı, zəhmət olmasa GPS-i yoxlayın.');
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0
+    }
+  );
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const geoBtn = document.getElementById("geoBtn");
+  if (geoBtn) {
+    geoBtn.addEventListener("click", fillAddressFromLocation);
+  }
+});
+
+</script>
+<!-- Ölçü Video Modal -->
+<div id="videoModal" class="video-modal">
+  <div class="video-content">
+    <span class="close-btn" onclick="closeVideoModal()">&times;</span>
+    <video id="measureVideo" controls>
+      <source src="images/olcu.mp4" type="video/mp4">
+      Sizin brauzeriniz videonu dəstəkləmir.
+    </video>
+  </div>
+</div>
+
+<script>
+function openVideoModal() {
+  const modal = document.getElementById("videoModal");
+  modal.classList.add("show");
+  const video = document.getElementById("measureVideo");
+  video.currentTime = 0;
+  video.play();
+}
+
+function closeVideoModal() {
+  const modal = document.getElementById("videoModal");
+  const video = document.getElementById("measureVideo");
+  modal.classList.remove("show");
+  video.pause();
+  video.currentTime = 0;
 }
 </script>
+</body>
+</html>
