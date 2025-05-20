@@ -105,17 +105,32 @@
       width: 28px;
       height: 28px;
     }
-    #orderButton {
-      display: block;
-      margin: 30px auto 50px auto;
-      background-color: #005baa;
-      color: white;
-      font-size: 1.5em;
-      padding: 15px 40px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-    }
+#orderButton {
+  display: block;
+  margin: 30px auto 50px auto;
+  background-color: #66e56f;
+  color: white;
+  font-size: 1.5em;
+  padding: 15px 40px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(0, 255, 100, 0.5);
+  animation: pulse 2s infinite;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#orderButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(0, 255, 100, 0.8);
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 10px rgba(0,255,100,0.4); }
+  50% { box-shadow: 0 0 20px rgba(0,255,100,0.9); }
+  100% { box-shadow: 0 0 10px rgba(0,255,100,0.4); }
+}
+
     #calculatorForm {
       display: none;
       max-width: 700px;
@@ -195,7 +210,7 @@
       transition: background-color 0.3s ease;
     }
     #calculatorForm button:hover {
-      background-color: #004080;
+      background-color: #bafec1;
     }
     #errorMsg {
       margin-top: 20px;
@@ -446,17 +461,13 @@ document.getElementById('orderButton').addEventListener('click', function() {
         <span class="color-box" style="background-color: #a0a0a0;border: 2px solid black;" title="Boz"></span>
       </label>
     </div>
+    <small style="color: #d93025; font-weight: 600;">📌 Ağdan başqa hər rəng üçün əlavə 5 AZN tətbiq olunur</small>
+
 
     <label>Material qalınlığı:</label>
     <select id="material">
       <option value="orta">Orta</option>
       <option value="qalın">Qalın</option>
-    </select>
-
-    <label>İstifadə sahəsi:</label>
-    <select id="use">
-      <option value="pencere">Pəncərə</option>
-      <option value="qapi">Qapı</option>
     </select>
 
     <label>Açılma tipi:</label>
@@ -587,7 +598,6 @@ function calculatePrice() {
   const height = Math.ceil(Number(heightRaw)); // qiymət üçün 102
   const color = document.querySelector('input[name="color"]:checked')?.value || "Ağ";
   const material = document.getElementById('material').value;
-  const use = document.getElementById('use').value;
   const opening = document.getElementById('opening').value;
   const address = document.getElementById('address').value.trim();
   const fullName = document.getElementById('fullName').value.trim();
@@ -640,17 +650,17 @@ else if (width >= 50 && width <= 150 && height <= 300) basePrice = 130;
   if (material === 'qalın') basePrice += 10;
 
   let colorPrice = 0;
-  if (color !== 'Ağ') {
-    if (use === 'qapi') colorPrice = 10;
-    else if (use === 'pencere') colorPrice = 5;
-  }
+if (color !== 'Ağ') {
+  colorPrice = 5;
+}
+
 
   basePrice += colorPrice;
 
  let finalPrice = basePrice;
 
 const promoInput = promo.trim().toLowerCase();
-if (promoInput === "ilk10") {
+if (promoInput === "ilk10" || promoInput === "ılk10") {
   finalPrice =  Math.round((basePrice * 0.9).toFixed(0)); // 10% endirim
 }
 
@@ -684,7 +694,6 @@ if (promoInput === "ilk10") {
 Ölçü:  ${widthRaw}x${heightRaw} sm
 Rəng: ${color}
 Material: ${material}
-İstifadə: ${use}
 Açılma tipi: ${opening}
 Ad Soyad: ${fullName}
 Əlaqə: ${phone}
