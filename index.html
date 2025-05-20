@@ -500,9 +500,9 @@ document.getElementById('orderButton').addEventListener('click', function() {
 
 <label>Əlaqə nömrəsi:</label>
 <input type="tel" id="phone"
-       pattern="^\+994\d{9}$"
+       pattern="(\+994|994|0)?\d{9}$"
        maxlength="13"
-       inputmode="numeric"
+       inputmode="tel"
        placeholder="+994XXXXXXXXX"
        required>
 <label for="promoCode">Endirim kodu:</label>
@@ -634,10 +634,13 @@ function calculatePrice() {
     return;
   }
 
-if (!phone || !/^\+994\d{9}$/.test(phone)) {
-  showError('Zəhmət olmasa, +994 ilə başlayan 9 rəqəmli nömrə daxil edin. Məsələn: +994501234567');
+const cleanedPhone = phone.replace(/\s/g, '');
+
+if (!/^(?:\+994|994|0)?\d{9}$/.test(cleanedPhone)) {
+  showError('Zəhmət olmasa, düzgün Azərbaycan nömrəsi daxil edin. Məsələn: 0501234567, 994501234567 və ya +994501234567');
   return;
 }
+
 
 
   if (!widthRaw || isNaN(width) || width < 40) {
@@ -705,7 +708,7 @@ const discountPriceBox = document.getElementById('discountPriceBox');
 priceBox.style.display = 'block';
 
 if (isDiscount) {
-  originalPriceBox.innerHTML = `Endirimsiz Qiymət: <span>${basePrice.toFixed(0)}</span> AZN`;
+  originalPriceBox.innerHTML = `Endirimsiz Qiymət: <span>${basePrice.toFixed(0)}</spafn> AZN`;
   originalPriceBox.style.textDecoration = 'line-through';
   originalPriceBox.style.color = 'gray';
   originalPriceBox.style.display = 'block';
@@ -800,7 +803,7 @@ async function fillAddressFromLocation() {
     },
     {
       enableHighAccuracy: true,
-      timeout: 10000,
+      timeout: 20000,
       maximumAge: 0
     }
   );
