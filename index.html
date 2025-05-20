@@ -9,6 +9,42 @@
   <title>SetkaZone</title>
 
   <style>
+    .notice {
+    display: block;
+    clear: both;
+    background: linear-gradient(to right, #e0ffe6, #ccffe0);
+    border-left: 6px solid #28a745;
+    color: #155724;
+    padding: 14px 20px;
+    margin: 16px 0 12px 0;
+    font-weight: 600;
+    border-radius: 10px;
+    max-width: 100%;
+    animation: pulseNotice 2s infinite;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    position: relative;
+  }
+
+  .notice::before {
+    content: "📌";
+    font-size: 1.2em;
+    margin-right: 10px;
+  }
+
+  @keyframes pulseNotice {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.03);
+      opacity: 0.9;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
  * {
       box-sizing: border-box;
     }
@@ -445,8 +481,8 @@ document.getElementById('orderButton').addEventListener('click', function() {
 </script>
 
 <div id="calculatorForm" style="display:none;">
-  <p style="text-align:center; color:red; font-weight:bold; margin-top:20px;">📌 Qeyd: Çatdırılma və quraşdırılma qiymətə daxil deyil!</p>
-  <p style="text-align:center; color:red; font-weight:bold; margin-top:20px;">📌 Qeyd: 1-dən çox sifariş üçün formdan bir neçə dəfə istifadə edin və ya bizlə əlaqə saxlayın!</p>
+  <div class="notice">Qeyd: Çatdırılma və quraşdırılma qiymətə daxil deyil!</div>
+  <div class="notice">Qeyd: 1-dən çox sifariş üçün formdan bir neçə dəfə istifadə edin və ya bizlə əlaqə saxlayın!</div>
 
 
   <h1>SetkaZone Sifariş Formu</h1>
@@ -480,7 +516,7 @@ document.getElementById('orderButton').addEventListener('click', function() {
         <span class="color-box" style="background-color: #a0a0a0;border: 2px solid black;" title="Boz"></span>
       </label>
     </div>
-    <small style="color: #d93025; font-weight: 600;">📌 Ağdan başqa hər rəng üçün əlavə 5 AZN tətbiq olunur</small>
+<div class="notice">Ağdan başqa hər rəng üçün əlavə 5 AZN tətbiq olunur</div>
 
 
     <label>Material qalınlığı:</label>
@@ -488,6 +524,8 @@ document.getElementById('orderButton').addEventListener('click', function() {
       <option value="orta">Orta</option>
       <option value="qalın">Qalın</option>
     </select>
+<div class="notice">Qalın material üçün əlavə 5 AZN tətbiq olunur</div>
+
 
     <label>Açılma tipi:</label>
     <select id="opening">
@@ -503,7 +541,7 @@ document.getElementById('orderButton').addEventListener('click', function() {
        pattern="(\+994|994|0)?\d{9}$"
        maxlength="13"
        inputmode="tel"
-       placeholder="+994XXXXXXXXX"
+       placeholder="Nömrənizi daxil edin"
        required>
 <label for="promoCode">Endirim kodu:</label>
 <input
@@ -537,9 +575,7 @@ document.getElementById('orderButton').addEventListener('click', function() {
   aria-label="Avtomatik lokasiya üçün klikləyin"
 > 📍 Avtomatik ünvan</button>
   </div>
-<small class="address-hint" style="display:block; text-align:center; margin-top:10px;">
-  📌 Avtomatik ünvan üçün yuxarıdakı düyməyə klikləyin
-</small>
+<div class="notice">📍 Avtomatik ünvan üçün yuxarıdakı düyməyə klikləyin</div>
 </div>
 <div id="toast" style="
   display:none;
@@ -676,7 +712,7 @@ else if (width >= 50 && width <= 150 && height <= 300) basePrice = 130;
     return;
   }
 
-  if (material === 'qalın') basePrice += 10;
+  if (material === 'qalın') basePrice += 5;
 
   let colorPrice = 0;
 if (color !== 'Ağ') {
