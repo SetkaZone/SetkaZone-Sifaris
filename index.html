@@ -621,15 +621,17 @@ function calculatePrice() {
 
   let basePrice = 0;
 
-  if (width >= 40 && width <= 70 && height <= 100) basePrice = 45;
-  else if (width >= 40 && width <= 70 && height <= 120) basePrice = 50;
-  else if (width >= 40 && width <= 70 && height <= 140) basePrice = 55;
-  else if (width >= 40 && width <= 80 && height <= 150) basePrice = 60;
-  else if (width >= 40 && width <= 80 && height <= 170) basePrice = 65;
-  else if (width >= 50 && width <= 90 && height <= 200) basePrice = 100;
-  else if (width >= 50 && width <= 150 && height <= 220) basePrice = 105;
-  else if (width >= 50 && width <= 150 && height <= 240) basePrice = 115;
-  else if (width >= 50 && width <= 150 && height <= 300) basePrice = 130;
+if (width >= 40 && width <= 70 && height <= 100) basePrice = 45;
+else if (width >= 40 && width <= 70 && height <= 120) basePrice = 50;
+else if (width >= 40 && width <= 70 && height <= 140) basePrice = 55;
+else if (width >= 40 && width <= 80 && height <= 150) basePrice = 60;
+else if (width >= 40 && width <= 80 && height <= 170) basePrice = 65;
+else if (width >= 50 && width <= 90 && height <= 180) basePrice = 75;
+else if (width >= 50 && width <= 90 && height <= 190) basePrice = 85;
+else if (width >= 50 && width <= 90 && height <= 200) basePrice = 95;
+else if (width >= 50 && width <= 150 && height <= 220) basePrice = 105;
+else if (width >= 50 && width <= 150 && height <= 240) basePrice = 115;
+else if (width >= 50 && width <= 150 && height <= 300) basePrice = 130;
   else {
     showError('Daxil etdiyiniz ölçülər üçün qiymət mövcud deyil.');
     return;
