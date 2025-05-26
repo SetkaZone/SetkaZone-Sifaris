@@ -9,6 +9,124 @@
   <title>SetkaZone</title>
 
   <style>
+ #chatbot-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  font-family: 'Segoe UI', sans-serif;
+}
+#chatbot-toggle {
+  background: linear-gradient(135deg, #ff7e5f, #feb47b);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 25px;
+  border: none;
+  font-weight: bold;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: 0.3s;
+}
+#chatbot-toggle:hover {
+  background: linear-gradient(135deg, #ff4e50, #f9d423);
+  transform: scale(1.05);
+}
+#chatbot-box {
+  display: none;
+  background: #fff;
+  width: 380px;
+  max-height: 550px;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  border: 1px solid #ddd;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+}
+#chatbot-header {
+  font-size: 16px;
+  font-weight: 600;
+  background: #ff7043;
+  color: white;
+  padding: 8px 12px;
+  text-align: center;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+#chatbot-messages {
+  display: flex;
+  flex-direction: column;
+  max-height: 350px;
+  overflow-y: auto;
+  font-size: 14px;
+  margin-bottom: 10px;
+  padding-right: 5px;
+  background: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 8px;
+}
+#chatbot-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 6px;
+}
+#chatbot-box button {
+  width: 100%;
+  padding: 10px;
+  background: #ff6f61;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+#chatbot-box button:hover {
+  background: #e64a19;
+}
+#chatbot-box.dark-mode {
+    background: #222 !important;
+    color: #fff !important;
+  }
+
+  #chatbot-box.dark-mode input,
+  #chatbot-box.dark-mode button {
+    background: #333;
+    color: #fff;
+    border-color: #555;
+  }
+
+  #chatbot-messages {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chat-user {
+    background: #e3f2fd;
+    padding: 8px 12px;
+    border-radius: 14px 14px 2px 14px;
+    margin-bottom: 6px;
+    max-width: 80%;
+    align-self: flex-end;
+    color: #0d47a1;
+  }
+
+  .chat-bot {
+    background: #ffecb3;
+    padding: 8px 12px;
+    border-radius: 14px 14px 14px 2px;
+    margin-bottom: 6px;
+    max-width: 80%;
+    align-self: flex-start;
+    color: #bf360c;
+  }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
     .notice {
     display: block;
     clear: both;
@@ -482,6 +600,7 @@
 </head>
 <body>
 
+
 <header>
   <img src="images/logo.jpg" alt="SetkaZone Logo" />
   <h1>SetkaZone</h1>
@@ -926,7 +1045,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function openVideoModal() {
   const modal = document.getElementById("videoModal");
   modal.classList.add("show");
-  document.body.style.overflow = "hidden"; // Scrollu bağla
+  document.body.style.overflow = "hidden";
   const video = document.getElementById("measureVideo");
   video.currentTime = 0;
   video.play();
@@ -936,16 +1055,136 @@ function closeVideoModal() {
   const modal = document.getElementById("videoModal");
   const video = document.getElementById("measureVideo");
   modal.classList.remove("show");
-  document.body.style.overflow = ""; // Scrollu geri aç
+  document.body.style.overflow = ""; 
   video.pause();
   video.currentTime = 0;
 
-  // Forma scroll et
   const form = document.getElementById("calculatorForm");
   if (form) {
     form.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }
 </script>
+<div id="chatbot-container">
+  <button id="chatbot-toggle">💬 Sual ver</button>
+<div id="chatbot-box" style="display: none;">
+    <div id="chatbot-header">SetkaZone Chatbot</div>
+    <div id="chatbot-messages"></div>
+    <input type="text" id="chatbot-input" placeholder="Sualınızı yazın...">
+    <button onclick="askBot()">Göndər</button>
+  </div>
+  <button onclick="toggleDarkMode()" style="margin-top: 8px; padding: 6px 12px; background: #444; color: white; border-radius: 8px; border: none; cursor: pointer;">🌙 Dark Mode</button>
+</div>
+<script>
+const responses = [
+  { keys: ["salam", "hi", "salam aleykum"], answer: "Salam, xoş gördük! 😊" },
+  { keys: ["necəsən", "necesen", "necə gedir"], answer: "Çox sağ olun, mən əla işləyirəm! Sizə necə kömək edə bilərəm?" },
+  { keys: ["bugün", "tarix", "neçənci gündür"], answer: () => {
+    const d = new Date();
+    return `Bu gün ${d.toLocaleDateString('az-AZ')} (${d.toLocaleString('az-AZ', { weekday: 'long' })})`;
+  }},
+  { keys: ["çox sağ ol", "təşəkkür", "sağol"], answer: "Siz sağ olun! Hər zaman burdayam 😊" },
+  { keys: ["əlaqə", "nömrə", "whatsapp"], answer: "Bizimlə WhatsApp, Instagram və zəng vasitəsilə əlaqə saxlaya bilərsiniz." },
+  { keys: ["ən yaxşı", "tövsiyə", "model"], answer: "Ən çox tövsiyə olunan model: qalın material və antrasit rəng – həm keyfiyyətli, həm də estetik görünür." },
+  { keys: ["material", "hazirlanir"], answer: "Setkalar birbaşa Türkiyə istehsalı alüminium materiallardan hazırlanır." },
+  { keys: ["hava"], answer: "Bəli, tüllər hava axınına uyğundur, evin havasını kəsmir." },
+  { keys: ["su", "keçir"], answer: "Tüllər tam su keçirməzdir." },
+  { keys: ["tül", "rəng", "dəyişir"], answer: "Xeyr, standart rəngdə tül istifadə olunur, rəngi dəyişmir." },
+  { keys: ["qalın", "nazik"], answer: "Qalın material daha uzunömürlü və möhkəmdir." },
+  { keys: ["turkiye"], answer: "Bəli, bütün materiallar 100% Türkiyə istehsalıdır." },
+  { keys: ["sürgülü", "mexanizm"], answer: "Sürgülü sistem – qapı kimi yana açılıb bağlanan rahat sistemdir." },
+  { keys: ["çərçivə"], answer: "Çərçivə Türkiyə istehsalı alüminium materialdandır." },
+  { keys: ["mesh", "dəyişmək"], answer: "Bəli, bütün aksesuarlar, o cümlədən tül dəyişdirilə bilər." },
+  { keys: ["ölçü", "boy"], answer: "Setkalar istənilən ölçüdə hazırlanır. Minimum ölçü 40x40 sm-dir." },
+  { keys: ["çatdırılma", "hara", "ərazi"], answer: "Xırdalan və Bakı ətrafı ünvanlara çatdırılma mümkündür." },
+  { keys: ["zəmanət"], answer: "Bütün məhsullara 6 ay zəmanət verilir." },
+  { keys: ["promo", "kod", "endirim"], answer: "'ILK10' endirim kodu ilə 10% endirim əldə edə bilərsiniz." },
+  { keys: ["çatdırılma", "qiymət", "daxil"], answer: "Əgər ünvan Xırdalandadırsa, ölçünü pulsuz alırıq. Digər hallarda bolt-dan gediş-gəliş qiyməti əlavə olunur." },
+  { keys: ["sən", "kimsən"], answer: "Mən SetkaZone-un rəsmi chatbotuyam – sizə məhsullarımız barədə kömək etmək üçün burdayam!" },
+  { keys: ["sifariş", "necə"], answer: "Sifariş üçün formu doldurun və ya WhatsApp ilə birbaşa bizimlə əlaqə saxlayın." },
+  { keys: ["forma", "kvadrat", "düzbucaqlı"], answer: "Setkalar yalnız kvadrat və düzbucaqlı formada hazırlanır." },
+  { keys: ["quraşdırma", "neçə", "gün"], answer: "Quraşdırma adətən sifariş günündə və ya 1 gün sonra edilir." },
+  { keys: ["rəng", "mövcuddur"], answer: "Mövcud rənglər: ağ, koyu meşə (qara), altın meşə (qəhvəyi), antrasit (boz)." },
+  { keys: ["qiymət", "neçə", "neçəyə"], answer: "Qiymət ölçü, rəng və material qalınlığına görə hesablanır." },
+  { keys: ["pəncərə", "qapı"], answer: "Bəli, həm pəncərə, həm də qapılar üçün uyğundur." },
+  { keys: ["təmizlik", "silmək"], answer: "Setkanı yaş dəsmalla silməklə təmizləmək kifayətdir." },
+  { keys: ["ölçü", "götürmək"], answer: "Videodakı təlimatlarla özünüz ölçü götürə bilərsiniz." },
+  { keys: ["ölçü", "kömək", "gətirmək"], answer: "Əgər ünvan Xırdalandadırsa, ölçü pulsuz götürülür. Digər yerlərə isə əlavə ödənişlidir." },
+  { keys: ["fərq", "fərqlənir", "başqa", "marka"], answer: "Bizim hazırladığımız setkalar defektli çıxarsa, pulsuz dəyişdiririk və ya yenidən düzəldirik." },
+  { keys: ["sayt", "istifadə", "kömək"], answer: "'Sifariş et' düyməsinə klikləyin və formu doldurun." }
+];
+
+function normalize(text) {
+  return text.toLowerCase()
+    .replace(/[ə]/g, "e")
+    .replace(/[ç]/g, "c")
+    .replace(/[ş]/g, "s")
+    .replace(/[ı]/g, "i")
+    .replace(/[ğ]/g, "g")
+    .replace(/[ö]/g, "o")
+    .replace(/[ü]/g, "u")
+    .replace(/[^\w\s]/gi, ""); 
+  }
+
+function toggleDarkMode() {
+  document.getElementById("chatbot-box").classList.toggle("dark-mode");
+}
+
+function playDing() {
+  const audio = document.getElementById("ding");
+  if (audio) audio.play();
+}
+
+function askBot() {
+  const input = document.getElementById("chatbot-input");
+  const messages = document.getElementById("chatbot-messages");
+  const userText = input.value.trim();
+  if (!userText) return;
+
+  messages.innerHTML += `<div class="chat-user">💬 ${userText}</div>`;
+  messages.innerHTML += `<div id="typing" class="chat-bot">🤖 Yazır...</div>`;
+  messages.scrollTop = messages.scrollHeight;
+
+  const normText = normalize(userText);
+  let bestMatch = null;
+  let maxScore = 0;
+
+  for (const item of responses) {
+    let score = 0;
+    for (const key of item.keys) {
+      const normKey = normalize(key);
+      if (normText.includes(normKey)) score++;
+    }
+    if (score > maxScore) {
+      maxScore = score;
+      bestMatch = item;
+    }
+  }
+
+  let reply = "Bu barədə əlimdə dəqiq məlumat yoxdur. Ətraflı üçün WhatsApp ilə əlaqə saxlayın 😊";
+  if (bestMatch) {
+    reply = typeof bestMatch.answer === "function" ? bestMatch.answer() : bestMatch.answer;
+  }
+
+  setTimeout(() => {
+    const typingDiv = document.getElementById("typing");
+    if (typingDiv) typingDiv.remove();
+    messages.innerHTML += `<div class="chat-bot">🤖 ${reply}</div>`;
+    playDing();
+    messages.scrollTop = messages.scrollHeight;
+  }, 500);
+
+  input.value = "";
+}
+document.getElementById("chatbot-toggle").addEventListener("click", () => {
+  const box = document.getElementById("chatbot-box");
+  box.style.display = box.style.display === "none" ? "block" : "none";
+});
+
+document.getElementById("chatbot-input").addEventListener("keypress", function (e) {
+  if (e.key === "Enter") askBot();
+});
+</script>
+<audio id="ding" src="images/ding.mp3"></audio>
 </body>
 </html>
