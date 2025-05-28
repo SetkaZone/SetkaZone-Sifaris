@@ -608,7 +608,7 @@
 
 <div class="info-box">
   <h2>Sürgülü Setkalar Haqqında</h2>
-  <p>Sürgülü setkalar digər setkalar kimi düşmə ehtimalı yoxdur, materialı adi setkadan çox daha qalın və keyfiyyətlidir. İstifadə olunan tül su keçirmir, lakin hava axını çox yaxşıdır. Həmçinin SetkaZone setkaları zəmanətlidir və bütün materialları Türkiyə istehsalıdır. Tülünün təmizlənməsi çox sadədir, nəm dəsmalla silmək kifayətdir.</p>
+  <p>Sürgülü setkalar digər setkalar kimi düşmə ehtimalı yoxdur, materialı adi setkadan çox daha qalın və keyfiyyətlidir. İstifadə olunan tül su keçirmir, lakin hava axını çox eladır. Həmçinin SetkaZone setkaları zəmanətlidir və bütün materialları Türkiyə istehsalıdır. Tülünün təmizlənməsi çox sadədir, nəm dəsmalla silmək kifayətdir.</p>
 </div>
 
 <div class="image-gallery">
@@ -1030,7 +1030,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 </script>
-<!-- Ölçü Video Modal -->
 <div id="videoModal" class="video-modal">
   <div class="video-content">
     <span class="close-btn" onclick="closeVideoModal()">&times;</span>
@@ -1067,65 +1066,14 @@ function closeVideoModal() {
 </script>
 <div id="chatbot-container">
   <button id="chatbot-toggle">💬 Sual ver</button>
-<div id="chatbot-box" style="display: none;">
+  <div id="chatbot-box">
     <div id="chatbot-header">SetkaZone Chatbot</div>
     <div id="chatbot-messages"></div>
     <input type="text" id="chatbot-input" placeholder="Sualınızı yazın...">
     <button onclick="askBot()">Göndər</button>
   </div>
-  <button onclick="toggleDarkMode()" style="margin-top: 8px; padding: 6px 12px; background: #444; color: white; border-radius: 8px; border: none; cursor: pointer;">🌙 Dark Mode</button>
 </div>
 <script>
-const responses = [
-  { keys: ["salam", "hi", "salam aleykum"], answer: "Salam, xoş gördük! 😊" },
-  { keys: ["necəsən", "necesen", "necə gedir"], answer: "Çox sağ olun, mən əla işləyirəm! Sizə necə kömək edə bilərəm?" },
-  { keys: ["bugün", "tarix", "neçənci gündür"], answer: () => {
-    const d = new Date();
-    return `Bu gün ${d.toLocaleDateString('az-AZ')} (${d.toLocaleString('az-AZ', { weekday: 'long' })})`;
-  }},
-  { keys: ["çox sağ ol", "təşəkkür", "sağol"], answer: "Siz sağ olun! Hər zaman burdayam 😊" },
-  { keys: ["əlaqə", "nömrə", "whatsapp"], answer: "Bizimlə WhatsApp, Instagram və zəng vasitəsilə əlaqə saxlaya bilərsiniz." },
-  { keys: ["ən yaxşı", "tövsiyə", "model"], answer: "Ən çox tövsiyə olunan model: qalın material və antrasit rəng – həm keyfiyyətli, həm də estetik görünür." },
-  { keys: ["material", "hazirlanir"], answer: "Setkalar birbaşa Türkiyə istehsalı alüminium materiallardan hazırlanır." },
-  { keys: ["hava"], answer: "Bəli, tüllər hava axınına uyğundur, evin havasını kəsmir." },
-  { keys: ["su", "keçir"], answer: "Tüllər tam su keçirməzdir." },
-  { keys: ["tül", "rəng", "dəyişir"], answer: "Xeyr, standart rəngdə tül istifadə olunur, rəngi dəyişmir." },
-  { keys: ["qalın", "nazik"], answer: "Qalın material daha uzunömürlü və möhkəmdir." },
-  { keys: ["turkiye"], answer: "Bəli, bütün materiallar 100% Türkiyə istehsalıdır." },
-  { keys: ["sürgülü", "mexanizm"], answer: "Sürgülü sistem – qapı kimi yana açılıb bağlanan rahat sistemdir." },
-  { keys: ["çərçivə"], answer: "Çərçivə Türkiyə istehsalı alüminium materialdandır." },
-  { keys: ["mesh", "dəyişmək"], answer: "Bəli, bütün aksesuarlar, o cümlədən tül dəyişdirilə bilər." },
-  { keys: ["ölçü", "boy"], answer: "Setkalar istənilən ölçüdə hazırlanır. Minimum ölçü 40x40 sm-dir." },
-  { keys: ["çatdırılma", "hara", "ərazi"], answer: "Xırdalan və Bakı ətrafı ünvanlara çatdırılma mümkündür." },
-  { keys: ["zəmanət"], answer: "Bütün məhsullara 6 ay zəmanət verilir." },
-  { keys: ["promo", "kod", "endirim"], answer: "'ILK10' endirim kodu ilə 10% endirim əldə edə bilərsiniz." },
-  { keys: ["çatdırılma", "qiymət", "daxil"], answer: "Əgər ünvan Xırdalandadırsa, ölçünü pulsuz alırıq. Digər hallarda bolt-dan gediş-gəliş qiyməti əlavə olunur." },
-  { keys: ["sən", "kimsən"], answer: "Mən SetkaZone-un rəsmi chatbotuyam – sizə məhsullarımız barədə kömək etmək üçün burdayam!" },
-  { keys: ["sifariş", "necə"], answer: "Sifariş üçün formu doldurun və ya WhatsApp ilə birbaşa bizimlə əlaqə saxlayın." },
-  { keys: ["forma", "kvadrat", "düzbucaqlı"], answer: "Setkalar yalnız kvadrat və düzbucaqlı formada hazırlanır." },
-  { keys: ["quraşdırma", "neçə", "gün"], answer: "Quraşdırma adətən sifariş günündə və ya 1 gün sonra edilir." },
-  { keys: ["rəng", "mövcuddur"], answer: "Mövcud rənglər: ağ, koyu meşə (qara), altın meşə (qəhvəyi), antrasit (boz)." },
-  { keys: ["qiymət", "neçə", "neçəyə"], answer: "Qiymət ölçü, rəng və material qalınlığına görə hesablanır." },
-  { keys: ["pəncərə", "qapı"], answer: "Bəli, həm pəncərə, həm də qapılar üçün uyğundur." },
-  { keys: ["təmizlik", "silmək"], answer: "Setkanı yaş dəsmalla silməklə təmizləmək kifayətdir." },
-  { keys: ["ölçü", "götürmək"], answer: "Videodakı təlimatlarla özünüz ölçü götürə bilərsiniz." },
-  { keys: ["ölçü", "kömək", "gətirmək"], answer: "Əgər ünvan Xırdalandadırsa, ölçü pulsuz götürülür. Digər yerlərə isə əlavə ödənişlidir." },
-  { keys: ["fərq", "fərqlənir", "başqa", "marka"], answer: "Bizim hazırladığımız setkalar defektli çıxarsa, pulsuz dəyişdiririk və ya yenidən düzəldirik." },
-  { keys: ["sayt", "istifadə", "kömək"], answer: "'Sifariş et' düyməsinə klikləyin və formu doldurun." }
-];
-
-function normalize(text) {
-  return text.toLowerCase()
-    .replace(/[ə]/g, "e")
-    .replace(/[ç]/g, "c")
-    .replace(/[ş]/g, "s")
-    .replace(/[ı]/g, "i")
-    .replace(/[ğ]/g, "g")
-    .replace(/[ö]/g, "o")
-    .replace(/[ü]/g, "u")
-    .replace(/[^\w\s]/gi, ""); 
-  }
-
 function toggleDarkMode() {
   document.getElementById("chatbot-box").classList.toggle("dark-mode");
 }
@@ -1134,8 +1082,7 @@ function playDing() {
   const audio = document.getElementById("ding");
   if (audio) audio.play();
 }
-
-function askBot() {
+async function askBot() {
   const input = document.getElementById("chatbot-input");
   const messages = document.getElementById("chatbot-messages");
   const userText = input.value.trim();
@@ -1145,37 +1092,27 @@ function askBot() {
   messages.innerHTML += `<div id="typing" class="chat-bot">🤖 Yazır...</div>`;
   messages.scrollTop = messages.scrollHeight;
 
-  const normText = normalize(userText);
-  let bestMatch = null;
-  let maxScore = 0;
+  try {
+    const response = await fetch("https://setka-zone-sifaris.vercel.app./api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: userText })
+    });
 
-  for (const item of responses) {
-    let score = 0;
-    for (const key of item.keys) {
-      const normKey = normalize(key);
-      if (normText.includes(normKey)) score++;
-    }
-    if (score > maxScore) {
-      maxScore = score;
-      bestMatch = item;
-    }
-  }
-
-  let reply = "Bu barədə əlimdə dəqiq məlumat yoxdur. Ətraflı məlumat üçün WhatsApp ilə əlaqə saxlayın 😊";
-  if (bestMatch) {
-    reply = typeof bestMatch.answer === "function" ? bestMatch.answer() : bestMatch.answer;
-  }
-
-  setTimeout(() => {
-    const typingDiv = document.getElementById("typing");
-    if (typingDiv) typingDiv.remove();
-    messages.innerHTML += `<div class="chat-bot">🤖 ${reply}</div>`;
+    const data = await response.json();
+    document.getElementById("typing").remove();
+    messages.innerHTML += `<div class="chat-bot">🤖 ${data.reply}</div>`;
     playDing();
     messages.scrollTop = messages.scrollHeight;
-  }, 500);
+
+  } catch (error) {
+    document.getElementById("typing").remove();
+    messages.innerHTML += `<div class="chat-bot">🤖 Xəta baş verdi. Zəhmət olmasa bir az sonra yenidən yoxlayın.</div>`;
+  }
 
   input.value = "";
 }
+
 document.getElementById("chatbot-toggle").addEventListener("click", () => {
   const box = document.getElementById("chatbot-box");
   box.style.display = box.style.display === "none" ? "block" : "none";
